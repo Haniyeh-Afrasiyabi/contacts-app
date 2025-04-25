@@ -1,0 +1,20 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    /* justify-content: space-between; */
+
+  margin: 50px 0;
+  text-align: center;
+}
+
+.container h1 {
+  color: #304ffe;
+  margin-bottom: 20px;
+}
+
+.research{
+    display: flex;
+    justify-content: space-between;
+}
+  
