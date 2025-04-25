@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Header from "./components/Header";
-import Chart from "./components/Chart";
+import Contacts from "./components/Contacts";
 
 function App() {
   const [chart, setChart] = useState(null);
@@ -8,7 +8,7 @@ function App() {
     <>
       <Header setChart={setChart} />
 
-      {!!chart && <Chart chart={chart} setChart={setChart} />}
+      {!!chart && <Contacts chart={chart} setChart={setChart} />}
     </>
   );
 }
