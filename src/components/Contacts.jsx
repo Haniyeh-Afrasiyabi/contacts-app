@@ -1,8 +1,10 @@
 import { useState } from "react";
 import inputs from "../constants/inputs";
+import { v4 } from "uuid";
 import styles from "./Contacts.module.css";
+import ContactList from "./ContactList";
 
-function Contacts({ chart, setChart }) {
+function Contacts({ chart, setChart, contacts, setContacts }) {
   const [contact, setContact] = useState({
     id: "",
     name: "",
@@ -12,6 +14,8 @@ function Contacts({ chart, setChart }) {
   });
 
   const [alert, setAlert] = useState(false);
+
+  //   const [contacts, setContacts] = useState([]);
 
   const changeHandler = (event) => {
     const name = event.target.name;
@@ -30,6 +34,15 @@ function Contacts({ chart, setChart }) {
       return;
     }
     setAlert("");
+    const newContact = { ...contact, id: v4() };
+    setContacts((contacts) => [...contacts, newContact]);
+    setContact({
+      name: "",
+      lastName: "",
+      email: "",
+      phone: "",
+    });
+    setChart(null);
   };
 
   return (
@@ -48,6 +61,7 @@ function Contacts({ chart, setChart }) {
             key={index}
             type={input.type}
             name={input.name}
+            value={contact[input.name]}
             placeholder={input.placeholder}
             onChange={changeHandler}
           />
