@@ -3,8 +3,16 @@ import inputs from "../constants/inputs";
 import { v4 } from "uuid";
 import styles from "./Contacts.module.css";
 
-
-function Contacts({ setChart, contact, setContact, setContacts, contacts }) {
+function Contacts({
+  setChart,
+  contact,
+  setContact,
+  setContacts,
+  contacts,
+  onSave,
+  isEditing,
+  alert,
+}) {
   //   const [contact, setContact] = useState({
   //     id: "",
   //     name: "",
@@ -13,7 +21,7 @@ function Contacts({ setChart, contact, setContact, setContacts, contacts }) {
   //     phone: "",
   //   });
 
-  const [alert, setAlert] = useState(false);
+  // const [alert, setAlert] = useState(false);
 
   //   const [contacts, setContacts] = useState([]);
 
@@ -23,29 +31,27 @@ function Contacts({ setChart, contact, setContact, setContacts, contacts }) {
     setContact((contact) => ({ ...contact, [name]: value }));
   };
 
-  const addHandler = () => {
-    if (
-      !contact.name ||
-      !contact.lastName ||
-      !contact.email ||
-      !contact.email
-    ) {
-      setAlert("Please enter valid data!");
-      return;
-    }
-    setAlert("");
-    const newContact = { ...contact, id: v4() };
-    setContacts((contacts) => [...contacts, newContact]);
-    setContact({
-      name: "",
-      lastName: "",
-      email: "",
-      phone: "",
-    });
-    setChart(null);
-  };
-
-
+  // const addHandler = () => {
+  //   if (
+  //     !contact.name ||
+  //     !contact.lastName ||
+  //     !contact.email ||
+  //     !contact.email
+  //   ) {
+  //     setAlert("Please enter valid data!");
+  //     return;
+  //   }
+  //   setAlert("");
+  //   const newContact = { ...contact, id: v4() };
+  //   setContacts((contacts) => [...contacts, newContact]);
+  //   setContact({
+  //     name: "",
+  //     lastName: "",
+  //     email: "",
+  //     phone: "",
+  //   });
+  //   setChart(null);
+  // };
 
   return (
     <div className={styles.container}>
@@ -58,6 +64,7 @@ function Contacts({ setChart, contact, setContact, setContacts, contacts }) {
         x
       </span>
       <div className={styles.chart}>
+        <h2>{isEditing ? "ویرایش مخاطب" : "مخاطب جدید"}</h2>
         {inputs.map((input, index) => (
           <input
             key={index}
@@ -69,7 +76,10 @@ function Contacts({ setChart, contact, setContact, setContacts, contacts }) {
           />
         ))}
 
-        <button onClick={addHandler}>Add new contact</button>
+        {/* <button onClick={addHandler}>Add new contact</button> */}
+        <button onClick={onSave}>
+          {isEditing ? "ذخیره تغییرات" : "افزودن مخاطب"}
+        </button>
         <div className={styles.alert}>{alert && <p>{alert}</p>}</div>
       </div>
     </div>

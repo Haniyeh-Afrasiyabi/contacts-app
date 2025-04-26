@@ -1,8 +1,8 @@
 import ContactItem from "./ContactItem";
 import styles from "./ContactList.module.css";
 
-function ContactList({ contacts, setContacts, deleteHandler }) {
-  console.log("deleteHandler in ContactList:", typeof deleteHandler);
+function ContactList({ contacts, setContacts, deleteHandler, startEditing }) {
+  // console.log("deleteHandler in ContactList:", typeof deleteHandler);
   return (
     <div className={styles.container}>
       <h1>Contact List</h1>
@@ -14,6 +14,7 @@ function ContactList({ contacts, setContacts, deleteHandler }) {
               contact={contact}
               setContacts={setContacts}
               deleteHandler={deleteHandler}
+              startEditing={startEditing} // پاس دادن تابع ویرایش
             />
           ))}
         </ul>

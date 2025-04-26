@@ -2,6 +2,7 @@ import { useState } from "react";
 import Header from "./components/Header";
 import Contacts from "./components/Contacts";
 import ContactList from "./components/ContactList";
+import { v4 } from "uuid";
 
 function App() {
   const [chart, setChart] = useState(null);
@@ -14,11 +15,67 @@ function App() {
     phone: "",
   });
 
+  const [editingId, setEditingId] = useState(null); // ID مخاط
+
   const [contacts, setContacts] = useState([]);
+
+  const [alert, setAlert] = useState(false);
 
   const deleteHandler = (id) => {
     const newContacts = contacts.filter((contact) => contact.id !== id);
     setContacts(newContacts);
+  };
+
+  // تابع برای شروع ویرایش
+  const startEditing = (contact) => {
+    setContact(contact);
+    setEditingId(contact.id);
+    setChart(true); // نمایش فرم
+  };
+
+  const saveContact = () => {
+    // اعتبارسنجی فیلدها
+    if (
+      !contact.name?.trim() ||
+      !contact.lastName?.trim() ||
+      !contact.email?.trim() ||
+      !contact.phone?.trim()
+    ) {
+      setAlert("Please enter valid data!");
+      return;
+    }
+
+    // تعیین پیام تأیید بر اساس حالت
+    const confirmationMessage = editingId
+      ? "آیا مطمئن هستید که می‌خواهید تغییرات را ذخیره کنید؟"
+      : "آیا می‌خواهید مخاطب جدید اضافه کنید؟";
+
+    // نمایش دیالوگ تأیید
+    if (!window.confirm(confirmationMessage)) {
+      return; // اگر کاربر انصراف داد
+    }
+
+    setAlert(""); // ریست alert در هر حالت
+
+    if (editingId) {
+      // حالت ویرایش
+      setContacts(
+        contacts.map((c) =>
+          c.id === editingId ? { ...contact, id: editingId } : c
+        )
+      );
+      window.alert("تغییرات با موفقیت اعمال شد!");
+    } else {
+      // حالت افزودن جدید
+      const newContact = { ...contact, id: v4() };
+      setContacts([...contacts, newContact]); // اصلاح این خط
+      window.alert("مخاطب جدید با موفقیت اضافه شد!");
+    }
+
+    // ریست فرم
+    setContact({ name: "", lastName: "", email: "", phone: "" });
+    setEditingId(null);
+    setChart(null);
   };
 
   return (
@@ -33,10 +90,17 @@ function App() {
           setContacts={setContacts}
           contact={contact}
           setContact={setContact}
+          onSave={saveContact} // تغییر نام از addHandler به onSave
+          isEditing={!!editingId} // برای نمایش عنوان متفاوت در فرم
+          alert={alert}
         />
       )}
 
-      <ContactList contacts={contacts} deleteHandler={deleteHandler} />
+      <ContactList
+        contacts={contacts}
+        deleteHandler={deleteHandler}
+        startEditing={startEditing} // پاس دادن تابع ویرایش
+      />
     </>
   );
 }
