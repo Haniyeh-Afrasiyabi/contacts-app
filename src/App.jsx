@@ -6,7 +6,21 @@ import ContactList from "./components/ContactList";
 function App() {
   const [chart, setChart] = useState(null);
 
+  const [contact, setContact] = useState({
+    id: "",
+    name: "",
+    lastName: "",
+    email: "",
+    phone: "",
+  });
+
   const [contacts, setContacts] = useState([]);
+
+  const deleteHandler = (id) => {
+    const newContacts = contacts.filter((contact) => contact.id !== id);
+    setContacts(newContacts);
+  };
+
   return (
     <>
       <Header setChart={setChart} />
@@ -17,10 +31,12 @@ function App() {
           setChart={setChart}
           contacts={contacts}
           setContacts={setContacts}
+          contact={contact}
+          setContact={setContact}
         />
       )}
 
-      <ContactList contacts={contacts} setContacts={setContacts} />
+      <ContactList contacts={contacts} deleteHandler={deleteHandler} />
     </>
   );
 }

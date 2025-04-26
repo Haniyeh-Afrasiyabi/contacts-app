@@ -2,16 +2,16 @@ import { useState } from "react";
 import inputs from "../constants/inputs";
 import { v4 } from "uuid";
 import styles from "./Contacts.module.css";
-import ContactList from "./ContactList";
 
-function Contacts({ chart, setChart, contacts, setContacts }) {
-  const [contact, setContact] = useState({
-    id: "",
-    name: "",
-    lastName: "",
-    email: "",
-    phone: "",
-  });
+
+function Contacts({ setChart, contact, setContact, setContacts, contacts }) {
+  //   const [contact, setContact] = useState({
+  //     id: "",
+  //     name: "",
+  //     lastName: "",
+  //     email: "",
+  //     phone: "",
+  //   });
 
   const [alert, setAlert] = useState(false);
 
@@ -45,6 +45,8 @@ function Contacts({ chart, setChart, contacts, setContacts }) {
     setChart(null);
   };
 
+
+
   return (
     <div className={styles.container}>
       <span
@@ -68,7 +70,7 @@ function Contacts({ chart, setChart, contacts, setContacts }) {
         ))}
 
         <button onClick={addHandler}>Add new contact</button>
-        {alert && <p>{alert}</p>}
+        <div className={styles.alert}>{alert && <p>{alert}</p>}</div>
       </div>
     </div>
   );

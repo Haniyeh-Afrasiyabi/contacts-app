@@ -1,11 +1,9 @@
 import styles from "./header.module.css";
 
-function Header({setChart}) {
-
-  const showHandler = ()=>{
-    setChart(true)
-  }
-
+function Header({ setChart }) {
+  const showHandler = () => {
+    setChart(true);
+  };
 
   return (
     <div className={styles.container}>
@@ -13,7 +11,9 @@ function Header({setChart}) {
         <h1>Contacts</h1>
       </div>
       <div className={styles.research}>
-        <button onClick={showHandler}>+</button>
+        <button className={styles.cross} onClick={showHandler}>
+          +
+        </button>
         <input type="text" />
       </div>
     </div>
