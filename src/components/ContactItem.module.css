@@ -29,14 +29,27 @@
 .item button {
   width: 35px;
   height: 35px;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   background-color: #fff;
   border: none;
   border-radius: 50%;
   cursor: pointer;
   transition: 0.1s all ease-in-out;
+  margin-right: 5px;
 }
 
 .item button:hover {
   font-size: 1.7rem;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+@media (max-width: 900px) {
+  .email {
+    display: none;
+  }
 }

@@ -1,8 +1,8 @@
 const inputs = [
-  { type: "text", name: "name", placeholder: "Name" },
+  { type: "text", name: "name", placeholder: "First Name" },
   { type: "text", name: "lastName", placeholder: "Last Name" },
   { type: "email", name: "email", placeholder: "Email" },
-  { type: "number", name: "phone", placeholder: "phone" },
+  { type: "number", name: "phone", placeholder: "Phone Number" },
 ];
 
 export default inputs;

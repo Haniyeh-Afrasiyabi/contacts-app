@@ -1,57 +1,13 @@
-import { useState } from "react";
 import inputs from "../constants/inputs";
-import { v4 } from "uuid";
+
 import styles from "./Contacts.module.css";
 
-function Contacts({
-  setChart,
-  contact,
-  setContact,
-  setContacts,
-  contacts,
-  onSave,
-  isEditing,
-  alert,
-}) {
-  //   const [contact, setContact] = useState({
-  //     id: "",
-  //     name: "",
-  //     lastName: "",
-  //     email: "",
-  //     phone: "",
-  //   });
-
-  // const [alert, setAlert] = useState(false);
-
-  //   const [contacts, setContacts] = useState([]);
-
+function Contacts({ setChart, contact, setContact, onSave, isEditing, alert }) {
   const changeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
     setContact((contact) => ({ ...contact, [name]: value }));
   };
-
-  // const addHandler = () => {
-  //   if (
-  //     !contact.name ||
-  //     !contact.lastName ||
-  //     !contact.email ||
-  //     !contact.email
-  //   ) {
-  //     setAlert("Please enter valid data!");
-  //     return;
-  //   }
-  //   setAlert("");
-  //   const newContact = { ...contact, id: v4() };
-  //   setContacts((contacts) => [...contacts, newContact]);
-  //   setContact({
-  //     name: "",
-  //     lastName: "",
-  //     email: "",
-  //     phone: "",
-  //   });
-  //   setChart(null);
-  // };
 
   return (
     <div className={styles.container}>
@@ -64,7 +20,7 @@ function Contacts({
         x
       </span>
       <div className={styles.chart}>
-        <h2>{isEditing ? "ویرایش مخاطب" : "مخاطب جدید"}</h2>
+        <h2>{isEditing ? "Edit Contact" : "New Contact"}</h2>
         {inputs.map((input, index) => (
           <input
             key={index}
@@ -76,9 +32,8 @@ function Contacts({
           />
         ))}
 
-        {/* <button onClick={addHandler}>Add new contact</button> */}
         <button onClick={onSave}>
-          {isEditing ? "ذخیره تغییرات" : "افزودن مخاطب"}
+          {isEditing ? "Save Changes" : "Add Contact"}
         </button>
         <div className={styles.alert}>{alert && <p>{alert}</p>}</div>
       </div>

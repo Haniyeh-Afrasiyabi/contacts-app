@@ -27,3 +27,17 @@
   font-size: 1.2rem;
   font-weight: 500;
 }
+
+.deleteAllBtn {
+  margin: 1rem 0;
+  background-color: red;
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.deleteAllBtn:hover {
+  background-color: darkred;
+}

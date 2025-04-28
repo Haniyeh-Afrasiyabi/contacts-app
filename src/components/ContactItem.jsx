@@ -1,24 +1,52 @@
-import styles from "./contactItem.module.css";
+import styles from "./ContactItem.module.css";
 
-function ContactItem({ contact, deleteHandler, startEditing }) {
+function ContactItem({
+  contact,
+  deleteHandler,
+  startEditing,
+  selectedContacts,
+  setSelectedContacts,
+  isBulkDeleting,
+}) {
   const { id, name, lastName, email, phone } = contact;
 
-  // console.log("deleteHandler in ContactItem:", typeof deleteHandler);
-  // console.log("Contact ID:", id);
+  const toggleSelect = () => {
+    if (selectedContacts.includes(id)) {
+      setSelectedContacts(
+        selectedContacts.filter((selectedId) => selectedId !== id)
+      );
+    } else {
+      setSelectedContacts([...selectedContacts, id]);
+    }
+  };
 
   return (
     <li className={styles.item}>
+      <div className={styles.checkbox}>
+        {isBulkDeleting && (
+          <input
+            type="checkbox"
+            checked={selectedContacts.includes(id)}
+            onChange={toggleSelect}
+          />
+        )}
+      </div>
+
       <p>
         {name} {lastName}
       </p>
-      <p>
+      <p className={styles.email}>
         <span>📫</span> {email}
       </p>
       <p>
         <span>📞</span> {phone}
       </p>
-      <button onClick={() => startEditing(contact)}>✏️</button>
-      <button onClick={() => deleteHandler(id)}>🗑</button>
+      {!isBulkDeleting && (
+        <>
+          <button onClick={() => startEditing(contact)}>✏️</button>
+          <button onClick={() => deleteHandler(id)}>🗑</button>
+        </>
+      )}
     </li>
   );
 }

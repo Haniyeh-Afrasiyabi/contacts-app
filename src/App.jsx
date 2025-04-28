@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Header from "./components/Header";
 import Contacts from "./components/Contacts";
 import ContactList from "./components/ContactList";
@@ -15,27 +15,29 @@ function App() {
     phone: "",
   });
 
-  const [editingId, setEditingId] = useState(null); // ID مخاط
+  const [editingId, setEditingId] = useState(null);
 
   const [contacts, setContacts] = useState([]);
-  const [allContacts, setAllContacts] = useState([]);
+
+  const [filteredContacts, setFilteredContacts] = useState(contacts);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [alert, setAlert] = useState(false);
+
+  const [isBulkDeleting, setIsBulkDeleting] = useState(false);
 
   const deleteHandler = (id) => {
     const newContacts = contacts.filter((contact) => contact.id !== id);
     setContacts(newContacts);
   };
 
-  // تابع برای شروع ویرایش
   const startEditing = (contact) => {
     setContact(contact);
     setEditingId(contact.id);
-    setChart(true); // نمایش فرم
+    setChart(true);
   };
 
   const saveContact = () => {
-    // اعتبارسنجی فیلدها
     if (
       !contact.name?.trim() ||
       !contact.lastName?.trim() ||
@@ -68,63 +70,58 @@ function App() {
       return;
     }
 
-    // تعیین پیام تأیید بر اساس حالت
     const confirmationMessage = editingId
-      ? "آیا مطمئن هستید که می‌خواهید تغییرات را ذخیره کنید؟"
-      : "آیا می‌خواهید مخاطب جدید اضافه کنید؟";
+      ? "Are you sure you want to save the changes?"
+      : "Do you want to add a new contact?";
 
-    // نمایش دیالوگ تأیید
     if (!window.confirm(confirmationMessage)) {
-      return; // اگر کاربر انصراف داد
+      return;
     }
 
-    setAlert(""); // ریست alert در هر حالت
+    setAlert("");
 
     if (editingId) {
-      // حالت ویرایش
       setContacts(
         contacts.map((c) =>
           c.id === editingId ? { ...contact, id: editingId } : c
         )
       );
-      window.alert("تغییرات با موفقیت اعمال شد!");
+      window.alert("Changes have been saved successfully!");
     } else {
-      // حالت افزودن جدید
       const newContact = { ...contact, id: v4() };
       setContacts([...contacts, newContact]); // اصلاح این خط
-      window.alert("مخاطب جدید با موفقیت اضافه شد!");
+      window.alert("New contact added successfully!");
     }
 
-    // ریست فرم
     setContact({ name: "", lastName: "", email: "", phone: "" });
     setEditingId(null);
     setChart(null);
   };
 
-  // useEffect(() => {
-  //   // فرضی: fetch یا هرچی
-  //   setContacts(fetchedContacts);
-  //   setOriginalContacts(fetchedContacts);
-  // }, []);
-  
-  const searchHandler = (event) => {
-    const searchValue = event.target.value.toLowerCase().trim();
-  
-    if (searchValue === "") {
-      // اگر خالی بود، کل مخاطبین اصلی رو نمایش بده
-      setAllContacts(allContacts);
+  const searchHandler = (term) => {
+    setSearchTerm(term);
+    if (!term.trim()) {
+      setFilteredContacts(contacts);
     } else {
-      // اگر چیزی نوشته شده بود، فیلتر کن
-      const filteredContacts = allContacts.filter((contact) =>
-        contact.name.toLowerCase().includes(searchValue)
+      const filtered = contacts.filter(
+        (contact) =>
+          contact.name.toLowerCase().includes(term.toLowerCase()) ||
+          contact.lastName.toLowerCase().includes(term.toLowerCase()) ||
+          contact.email.toLowerCase().includes(term.toLowerCase()) ||
+          contact.phone.includes(term.toLowerCase())
       );
-      setContacts(filteredContacts);
+      setFilteredContacts(filtered);
     }
   };
-
   return (
     <>
-      <Header setChart={setChart} searchHandler={searchHandler} />
+      <Header
+        setChart={setChart}
+        searchHandler={searchHandler}
+        searchTerm={searchTerm}
+        isBulkDeleting={isBulkDeleting}
+        setIsBulkDeleting={setIsBulkDeleting}
+      />
 
       {!!chart && (
         <Contacts
@@ -134,16 +131,19 @@ function App() {
           setContacts={setContacts}
           contact={contact}
           setContact={setContact}
-          onSave={saveContact} // تغییر نام از addHandler به onSave
-          isEditing={!!editingId} // برای نمایش عنوان متفاوت در فرم
+          onSave={saveContact}
+          isEditing={!!editingId}
           alert={alert}
         />
       )}
 
       <ContactList
-        contacts={contacts}
+        contacts={searchTerm ? filteredContacts : contacts}
         deleteHandler={deleteHandler}
-        startEditing={startEditing} // پاس دادن تابع ویرایش
+        startEditing={startEditing}
+        isBulkDeleting={isBulkDeleting}
+        setContacts={setContacts}
+        setIsBulkDeleting={setIsBulkDeleting}
       />
     </>
   );
