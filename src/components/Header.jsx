@@ -1,6 +1,6 @@
 import styles from "./header.module.css";
 
-function Header({ setChart }) {
+function Header({ setChart, searchHandler }) {
   const showHandler = () => {
     setChart(true);
   };
@@ -14,7 +14,7 @@ function Header({ setChart }) {
         <button className={styles.cross} onClick={showHandler}>
           +
         </button>
-        <input type="text" />
+        <input type="text" onChange={searchHandler} />
       </div>
     </div>
   );

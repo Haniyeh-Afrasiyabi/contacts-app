@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "./components/Header";
 import Contacts from "./components/Contacts";
 import ContactList from "./components/ContactList";
@@ -18,6 +18,7 @@ function App() {
   const [editingId, setEditingId] = useState(null); // ID مخاط
 
   const [contacts, setContacts] = useState([]);
+  const [allContacts, setAllContacts] = useState([]);
 
   const [alert, setAlert] = useState(false);
 
@@ -42,6 +43,28 @@ function App() {
       !contact.phone?.trim()
     ) {
       setAlert("Please enter valid data!");
+      return;
+    }
+
+    if (
+      contact.name.length < 3 ||
+      contact.lastName.length < 3 ||
+      /\d/.test(contact.name) ||
+      /\d/.test(contact.lastName)
+    ) {
+      setAlert("Name or Last name is not correct");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(contact.email)) {
+      setAlert("فرمت ایمیل وارد شده معتبر نیست!");
+      return;
+    }
+
+    const phoneRegex = /^09\d{9}$/;
+    if (!phoneRegex.test(contact.phone)) {
+      setAlert("phone is not correct");
       return;
     }
 
@@ -78,9 +101,30 @@ function App() {
     setChart(null);
   };
 
+  // useEffect(() => {
+  //   // فرضی: fetch یا هرچی
+  //   setContacts(fetchedContacts);
+  //   setOriginalContacts(fetchedContacts);
+  // }, []);
+  
+  const searchHandler = (event) => {
+    const searchValue = event.target.value.toLowerCase().trim();
+  
+    if (searchValue === "") {
+      // اگر خالی بود، کل مخاطبین اصلی رو نمایش بده
+      setAllContacts(allContacts);
+    } else {
+      // اگر چیزی نوشته شده بود، فیلتر کن
+      const filteredContacts = allContacts.filter((contact) =>
+        contact.name.toLowerCase().includes(searchValue)
+      );
+      setContacts(filteredContacts);
+    }
+  };
+
   return (
     <>
-      <Header setChart={setChart} />
+      <Header setChart={setChart} searchHandler={searchHandler} />
 
       {!!chart && (
         <Contacts
